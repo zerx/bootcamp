@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace Bootcamp.Controllers
 {
@@ -14,40 +12,124 @@ namespace Bootcamp.Controllers
 
         static List<Todo> TodoList = new List<Todo>
         {
-            new Todo("Test 01", 2, new DateTime(1991,01,01),"test 01","test 01","test 01", CategoryEnum.BUG, 1),
-            new Todo("Test 02", 3, new DateTime(1991,01,02),"test 02","test 02","test 02", CategoryEnum.TASK, 2),
-            new Todo("Test 03", 4, new DateTime(1991,01,03),"test 03","test 03","test 03", CategoryEnum.EPIC, 3),
+            new Todo {
+            Id = Guid.NewGuid(),
+            Name = "Test 01",
+            Priority = 1,
+            Deadline = new DateTime(1991, 01, 01),
+            Description = "test 01",
+            Responsible = "test 01",
+            Status = "test 01",
+            Category = CategoryEnum.BUG,
+            ParentId = 1
+            },
+
+            new Todo {
+            Id = Guid.NewGuid(),
+            Name = "Test 02",
+            Priority = 2,
+            Deadline = new DateTime(1991, 01, 02),
+            Description = "test 02",
+            Responsible = "test 02",
+            Status = "test 02",
+            Category = CategoryEnum.BUG,
+            ParentId = 2
+            },
+
+            new Todo {
+            Id = Guid.NewGuid(),
+            Name = "Test 03",
+            Priority = 3,
+            Deadline = new DateTime(1991, 01, 03),
+            Description = "test 03",
+            Responsible = "test 03",
+            Status = "test 03",
+            Category = CategoryEnum.BUG,
+            ParentId = 3
+            }
         };
 
-        //GET /api/todo
-        public List<Todo> GetTodos()
+        private Todo GetTodoById(Guid id)
         {
-            return TodoList;
+            var todo = TodoList.Find(item => item.Id == id);
+            if (todo != null)
+            {
+                return todo;
+            }
+            else
+            {
+                throw new ArgumentException("Given ID is not found!");
+            }
+        }
+
+        //GET /api/todo
+        public IHttpActionResult GetTodos()
+        {
+            return Ok(TodoList);
         }
 
         //GET api/todo/{id}
-        public Todo GetTodo(int id)
+        public IHttpActionResult GetTodo(Guid id)
         {
-            return TodoList.ElementAt(id);
+            Todo item = GetTodoById(id);
+
+            if(item == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(item);
         }
 
         //POST api/todo
-        public void CreateTodo([FromBody] Todo todo)
+        public IHttpActionResult CreateTodo([FromBody] Todo newTodo)
         {
-            TodoList.Add(todo);
+            if(String.IsNullOrEmpty(newTodo.Name))
+            {
+                return BadRequest();
+            }
+
+            TodoList.Add(newTodo);
+            return Ok("New Todo added.");
+            
         }
 
-        //POST /api/todo/{id}
-        public void UpdateTodo(int id, [FromBody] Todo todo)
+        //PATCH /api/todo/{id}
+        public IHttpActionResult PatchTodo(Guid id, [FromBody] Todo todo)
         {
-            var temp = TodoList.ElementAt(id);
+            var temp = GetTodoById(id);
+
+            if(temp == null)
+            {
+                return BadRequest();
+            }
+
             temp.Name = todo.Name;
+            temp.Priority = todo.Priority;
+            temp.Deadline = todo.Deadline;
+            temp.Description = todo.Description;
+            temp.Responsible = todo.Responsible;
+            temp.Status = todo.Status;
+            temp.Category = todo.Category;
+            temp.ParentId = todo.ParentId;
+
+            return Ok("Todo updated!");
+
+
         }
 
         //DELETE api/todos/{id}
-        public void DeleteTodo(int id)
+        public IHttpActionResult DeleteTodo(Guid id)
         {
-            TodoList.RemoveAt(id);
+            Todo item = GetTodoById(id);
+
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            TodoList.Remove(GetTodoById(id));
+            return Ok("Todo deleted!");
         }
     }
 }
