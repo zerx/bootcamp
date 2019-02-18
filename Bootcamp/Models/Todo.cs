@@ -8,6 +8,7 @@ namespace Bootcamp.Models
 {
     public class Todo
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Priority { get; set; }
@@ -16,17 +17,5 @@ namespace Bootcamp.Models
         public string Status { get; set; }
         public CategoryEnum Category { get; set; }
         public int ParentId { get; set; }
-
-        public Todo(string name, int priority, DateTime deadline, string description, string responsible, string status, CategoryEnum category, int parentId)
-        {
-            Name = name;
-            Priority = priority;
-            Deadline = deadline;
-            Description = description;
-            Responsible = responsible;
-            Status = status;
-            Category = category;
-            ParentId = parentId;
-        }
     }
 }
