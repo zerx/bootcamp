@@ -1,135 +1,73 @@
-﻿using Bootcamp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System;
 using System.Web.Http;
+using System.Web.Http.OData;
+using TodoService.Logics;
+using TodoService.Models;
 
 namespace Bootcamp.Controllers
 {
     public class TodoController : ApiController
     {
 
-        static List<Todo> TodoList = new List<Todo>
-        {
-            new Todo {
-            Id = Guid.NewGuid(),
-            Name = "Test 01",
-            Priority = 1,
-            Deadline = new DateTime(1991, 01, 01),
-            Description = "test 01",
-            Responsible = "test 01",
-            Status = "test 01",
-            Category = CategoryEnum.BUG,
-            ParentId = 1
-            },
-
-            new Todo {
-            Id = Guid.NewGuid(),
-            Name = "Test 02",
-            Priority = 2,
-            Deadline = new DateTime(1991, 01, 02),
-            Description = "test 02",
-            Responsible = "test 02",
-            Status = "test 02",
-            Category = CategoryEnum.BUG,
-            ParentId = 2
-            },
-
-            new Todo {
-            Id = Guid.NewGuid(),
-            Name = "Test 03",
-            Priority = 3,
-            Deadline = new DateTime(1991, 01, 03),
-            Description = "test 03",
-            Responsible = "test 03",
-            Status = "test 03",
-            Category = CategoryEnum.BUG,
-            ParentId = 3
-            }
-        };
-
-        private Todo GetTodoById(Guid id)
-        {
-            var todo = TodoList.Find(item => item.Id == id);
-            if (todo != null)
-            {
-                return todo;
-            }
-            else
-            {
-                throw new ArgumentException("Given ID is not found!");
-            }
-        }
+        private TodoLogic todoLogic = new TodoLogic();
 
         //GET /api/todo
         public IHttpActionResult GetTodos()
         {
-            return Ok(TodoList);
+            return Ok(todoLogic.GetAllTodo());
         }
 
         //GET api/todo/{id}
         public IHttpActionResult GetTodo(Guid id)
         {
-            Todo item = GetTodoById(id);
+            return Ok(todoLogic.GetTodoById(id));
+        }
+        
 
-            if(item == null)
-            {
-                return BadRequest();
-            }
+        [HttpGet]
+        [Route("api/todo/category")]
+        public IHttpActionResult GetTodosOrderByCategory()
+        {
+            return Ok(todoLogic.GetTodosOrderByCategory());
+        }
 
-            return Ok(item);
+        [HttpGet]
+        [Route("api/todo/category/{categoryId}")]
+        public IHttpActionResult GetTodosByCategory(int categoryId)
+        {
+            return Ok(todoLogic.GetTodosByCategory(categoryId));
+        }
+
+        [HttpGet]
+        [Route("api/todos/fresh")]
+        public IHttpActionResult GetFreshTodos()
+        {
+            return Ok(todoLogic.GetFreshTodos());
         }
 
         //POST api/todo
-        public IHttpActionResult CreateTodo([FromBody] Todo newTodo)
+        public IHttpActionResult PostTodo([FromBody] Todo newTodo)
         {
-            if(String.IsNullOrEmpty(newTodo.Name))
-            {
-                return BadRequest();
-            }
+            todoLogic.PostTodo(newTodo);
+            return Ok("Todo added.");
 
-            TodoList.Add(newTodo);
-            return Ok("New Todo added.");
-            
         }
 
         //PATCH /api/todo/{id}
-        public IHttpActionResult PatchTodo(Guid id, [FromBody] Todo todo)
+        public IHttpActionResult PatchTodo(Guid id, [FromBody] Delta<Todo> todo)
         {
-            var temp = GetTodoById(id);
+            bool isPatched = todoLogic.PatchTodo(id, todo);
 
-            if(temp == null)
-            {
-                return BadRequest();
-            }
-
-            temp.Name = todo.Name;
-            temp.Priority = todo.Priority;
-            temp.Deadline = todo.Deadline;
-            temp.Description = todo.Description;
-            temp.Responsible = todo.Responsible;
-            temp.Status = todo.Status;
-            temp.Category = todo.Category;
-            temp.ParentId = todo.ParentId;
-
-            return Ok("Todo updated!");
-
+            return isPatched ? (IHttpActionResult)Ok("Todo updated.") : NotFound();
 
         }
 
-        //DELETE api/todos/{id}
+        //DELETE api/todo/{id}
         public IHttpActionResult DeleteTodo(Guid id)
         {
-            Todo item = GetTodoById(id);
 
-            if (item == null)
-            {
-                return BadRequest();
-            }
-
-            TodoList.Remove(GetTodoById(id));
-            return Ok("Todo deleted!");
+            bool isDeleted = todoLogic.DeleteTodo(id);
+            return isDeleted ? (IHttpActionResult)Ok("Todo deleted.") : NotFound();
         }
     }
 }
