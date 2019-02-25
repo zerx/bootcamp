@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using Bootcamp.Models;
 
-namespace Bootcamp.Models
+namespace TodoService.Models
 {
     public class Todo
     {
@@ -22,8 +18,9 @@ namespace Bootcamp.Models
         public DateTime Deadline { get; set; }
         [StringLength(30)]
         public string Status { get; set; }
-        public CategoryEnum Category { get; set; }
+        public int Category { get; set; }
         [Range(1, 3)]
         public int ParentId { get; set; }
+        public DateTime ModTime { get; set; }
     }
 }

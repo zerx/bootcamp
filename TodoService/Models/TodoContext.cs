@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace Bootcamp.Models
+namespace TodoService.Models
 {
     public class TodoContext : DbContext
     {

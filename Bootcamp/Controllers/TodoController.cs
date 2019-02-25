@@ -1,82 +1,73 @@
-﻿using Bootcamp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System;
 using System.Web.Http;
+using System.Web.Http.OData;
+using TodoService.Logics;
+using TodoService.Models;
 
 namespace Bootcamp.Controllers
 {
     public class TodoController : ApiController
     {
 
-        private TodoContext _db = new TodoContext();
+        private TodoLogic todoLogic = new TodoLogic();
 
         //GET /api/todo
         public IHttpActionResult GetTodos()
         {
-            return Ok(_db.Todos);
+            return Ok(todoLogic.GetAllTodo());
         }
 
         //GET api/todo/{id}
         public IHttpActionResult GetTodo(Guid id)
         {
-            var todo = _db.Todos.Find(id);
+            return Ok(todoLogic.GetTodoById(id));
+        }
+        
 
-            if (todo == null)
-            {
-                return BadRequest();
-            }
+        [HttpGet]
+        [Route("api/todo/category")]
+        public IHttpActionResult GetTodosOrderByCategory()
+        {
+            return Ok(todoLogic.GetTodosOrderByCategory());
+        }
 
-            return Ok(todo);
+        [HttpGet]
+        [Route("api/todo/category/{categoryId}")]
+        public IHttpActionResult GetTodosByCategory(int categoryId)
+        {
+            return Ok(todoLogic.GetTodosByCategory(categoryId));
+        }
+
+        [HttpGet]
+        [Route("api/todos/fresh")]
+        public IHttpActionResult GetFreshTodos()
+        {
+            return Ok(todoLogic.GetFreshTodos());
         }
 
         //POST api/todo
         public IHttpActionResult PostTodo([FromBody] Todo newTodo)
         {
-            newTodo.Id = Guid.NewGuid();
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _db.Todos.Add(newTodo);
-            _db.SaveChanges();
-
+            todoLogic.PostTodo(newTodo);
             return Ok("Todo added.");
 
         }
 
         //PATCH /api/todo/{id}
-        public IHttpActionResult PatchTodo(Guid id, [FromBody] Todo todo)
+        public IHttpActionResult PatchTodo(Guid id, [FromBody] Delta<Todo> todo)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            bool isPatched = todoLogic.PatchTodo(id, todo);
 
-            todo.Id = id;
-            _db.Entry(_db.Todos.Find(id)).CurrentValues.SetValues(todo);
-            _db.SaveChanges();
-
-            return Ok("Todo updated.");
-
+            return isPatched ? (IHttpActionResult)Ok("Todo updated.") : NotFound();
 
         }
 
-        //DELETE api/todos/{id}
+        //DELETE api/todo/{id}
         public IHttpActionResult DeleteTodo(Guid id)
         {
-            var todo = _db.Todos.Find(id);
-            if (todo is null)
-            {
-                return NotFound();
-            }
 
-            _db.Todos.Remove(todo);
-            _db.SaveChanges();
-
-            return Ok("Todo deleted.");
+            bool isDeleted = todoLogic.DeleteTodo(id);
+            return isDeleted ? (IHttpActionResult)Ok("Todo deleted.") : NotFound();
         }
     }
 }

@@ -6,7 +6,8 @@
 	[Priority] INT NOT NULL, 
 	[Responsible] NVARCHAR(30) NULL, 
 	[Deadline] DATETIME2 NULL, 
-	[Status] NVARCHAR(30) NULL, 
+	[Status] NVARCHAR(30) NULL,
+	[ModTime] DATETIME2 NULL,
 	[Category] INT NULL, 
 	[ParentId] INT NULL
 )
