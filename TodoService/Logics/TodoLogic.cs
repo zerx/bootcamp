@@ -5,11 +5,37 @@ using System.Web.Http.OData;
 using System.Linq;
 using TodoService.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Configuration;
 
 namespace TodoService.Logics
 {
     public class TodoLogic : ITodo
     {
+        //int minutesBefore = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MinutesBefore"]);
+        private int minutesBefore;
+
+        public TodoLogic()
+        {
+            int.TryParse(ConfigurationManager.AppSettings["MinutesBefore"], out minutesBefore);
+        }
+
+        public IEnumerable<TodoTree> GetTodoTree()
+        {
+            var nodes = new List<TodoTree>();
+
+            foreach (var todo in db.Todos)
+            {
+                if (todo.Id == Guid.Empty)
+                {
+
+                }
+            }
+
+            return nodes;
+        }
+
+
         private TodoContext db = new TodoContext();
         public IQueryable<Todo> GetAllTodo()
         {
@@ -33,7 +59,7 @@ namespace TodoService.Logics
 
         public IEnumerable<Todo> GetFreshTodos()
         {
-            return db.Todos.Where(e => e.Status == "Open" || DbFunctions.DiffMinutes(e.ModTime, DateTime.Now) <= 120);
+            return db.Todos.Where(e => e.Status == "Open" || DbFunctions.DiffMinutes(e.ModTime, DateTime.Now) <= minutesBefore);
         }
 
         public void PostTodo(Todo todo)

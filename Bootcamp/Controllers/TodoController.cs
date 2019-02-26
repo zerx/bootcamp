@@ -39,7 +39,7 @@ namespace Bootcamp.Controllers
         }
 
         [HttpGet]
-        [Route("api/todos/fresh")]
+        [Route("api/todo/fresh")]
         public IHttpActionResult GetFreshTodos()
         {
             return Ok(todoLogic.GetFreshTodos());
