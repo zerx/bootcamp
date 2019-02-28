@@ -13,7 +13,7 @@ namespace TodoService.Logics
     public class TodoLogic : ITodo
     {
         //int minutesBefore = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MinutesBefore"]);
-        private int minutesBefore;
+        private int minutesBefore = 120;
 
         public TodoLogic()
         {
@@ -22,17 +22,50 @@ namespace TodoService.Logics
 
         public IEnumerable<TodoTree> GetTodoTree()
         {
-            var nodes = new List<TodoTree>();
+            var todoTree = new List<TodoTree>();
 
-            foreach (var todo in db.Todos)
+
+            var parentTodos = new List<TodoTree>();
+
+            foreach (var dbtodo in db.Todos)
             {
-                if (todo.Id == Guid.Empty)
+                if (dbtodo.ParentId == Guid.Empty)
                 {
-
+                    var alma = new TodoTree(dbtodo);
+                    parentTodos.Add(alma);
+                    todoTree.Add(alma);
                 }
             }
 
-            return nodes;
+            SetChildren(todoTree, parentTodos);
+
+            return todoTree;
+
+        }
+
+        public bool SetChildren(List<TodoTree> todoTrees, List<TodoTree> todos)
+        {
+            var parentTodos = new List<TodoTree>();
+
+            foreach (var todo in todos)
+            {
+                foreach (var dbtodo in db.Todos)
+                {
+                    if (todo.Todo.Id == dbtodo.ParentId)
+                    {
+                        var alma = new TodoTree(dbtodo);
+                        parentTodos.Add(alma);
+                        todo.Children.Add(alma);
+                    }
+                }
+            }
+
+            if (parentTodos.Count == 0) {
+                return false;
+            }
+
+            SetChildren(todoTrees, parentTodos);
+            return true;
         }
 
 

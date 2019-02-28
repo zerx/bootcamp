@@ -9,5 +9,11 @@ namespace TodoService.Models
     {
         public Todo Todo { get; set; }
         public List<TodoTree> Children { get; set; }
+
+        public TodoTree(Todo todo)
+        {
+            this.Todo = todo;
+            this.Children = new List<TodoTree>();
+        }
     }
 }

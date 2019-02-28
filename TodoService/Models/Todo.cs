@@ -19,8 +19,7 @@ namespace TodoService.Models
         [StringLength(30)]
         public string Status { get; set; }
         public int Category { get; set; }
-        [Range(1, 3)]
-        public int ParentId { get; set; }
+        public Guid ParentId { get; set; }
         public DateTime ModTime { get; set; }
     }
 }

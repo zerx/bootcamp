@@ -1,13 +1,13 @@
-﻿CREATE TABLE [dbo].[TodoTable]
+﻿CREATE TABLE [dbo].[Todo]
 (
 	[Id] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL PRIMARY KEY, 
-	[Name] VARCHAR(30) NOT NULL, 
+	[Name] VARCHAR(30) NULL, 
 	[Description] NVARCHAR(300) NULL, 
-	[Priority] INT NOT NULL, 
+	[Priority] INT NULL, 
 	[Responsible] NVARCHAR(30) NULL, 
 	[Deadline] DATETIME2 NULL, 
 	[Status] NVARCHAR(30) NULL,
 	[ModTime] DATETIME2 NULL,
 	[Category] INT NULL, 
-	[ParentId] INT NULL
+	[ParentId] UNIQUEIDENTIFIER NULL
 )
