@@ -22,7 +22,14 @@ namespace Bootcamp.Controllers
         {
             return Ok(todoLogic.GetTodoById(id));
         }
-        
+
+        [HttpGet]
+        [Route("api/todo/todotree")]
+        public IHttpActionResult GetTodoTree()
+        {
+            return Ok(todoLogic.GetTodoTree());
+        }
+
 
         [HttpGet]
         [Route("api/todo/category")]
@@ -39,7 +46,7 @@ namespace Bootcamp.Controllers
         }
 
         [HttpGet]
-        [Route("api/todos/fresh")]
+        [Route("api/todo/fresh")]
         public IHttpActionResult GetFreshTodos()
         {
             return Ok(todoLogic.GetFreshTodos());
