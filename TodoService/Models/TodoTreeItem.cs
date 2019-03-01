@@ -5,15 +5,15 @@ using System.Web;
 
 namespace TodoService.Models
 {
-    public class TodoTree
+    public class TodoTreeItem
     {
         public Todo Todo { get; set; }
-        public List<TodoTree> Children { get; set; }
+        public List<TodoTreeItem> Children { get; set; }
 
-        public TodoTree(Todo todo)
+        public TodoTreeItem(Todo todo)
         {
             this.Todo = todo;
-            this.Children = new List<TodoTree>();
+            this.Children = new List<TodoTreeItem>();
         }
     }
 }

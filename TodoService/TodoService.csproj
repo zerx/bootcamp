@@ -100,7 +100,7 @@
     <Compile Include="Models\CategoryEnum.cs" />
     <Compile Include="Models\Todo.cs" />
     <Compile Include="Models\TodoContext.cs" />
-    <Compile Include="Models\TodoTree.cs" />
+    <Compile Include="Models\TodoTreeItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

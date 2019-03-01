@@ -20,51 +20,48 @@ namespace TodoService.Logics
             int.TryParse(ConfigurationManager.AppSettings["MinutesBefore"], out minutesBefore);
         }
 
-        public IEnumerable<TodoTree> GetTodoTree()
+        public IEnumerable<TodoTreeItem> GetTodoTree()
         {
-            var todoTree = new List<TodoTree>();
-
-
-            var parentTodos = new List<TodoTree>();
+            var todoTree = new List<TodoTreeItem>();
+            var rootTodos = new List<TodoTreeItem>();
 
             foreach (var dbtodo in db.Todos)
             {
                 if (dbtodo.ParentId == Guid.Empty)
                 {
-                    var alma = new TodoTree(dbtodo);
-                    parentTodos.Add(alma);
-                    todoTree.Add(alma);
+                    var newTodoTreeItem = new TodoTreeItem(dbtodo);
+                    todoTree.Add(newTodoTreeItem);
+                    rootTodos.Add(newTodoTreeItem);
                 }
             }
 
-            SetChildren(todoTree, parentTodos);
+            SetChildren(todoTree, rootTodos);
 
             return todoTree;
-
         }
 
-        public bool SetChildren(List<TodoTree> todoTrees, List<TodoTree> todos)
+        public bool SetChildren(List<TodoTreeItem> todoTree, List<TodoTreeItem> actualTreeLevel)
         {
-            var parentTodos = new List<TodoTree>();
+            var newTreeLevel = new List<TodoTreeItem>();
 
-            foreach (var todo in todos)
+            foreach (var todo in actualTreeLevel)
             {
                 foreach (var dbtodo in db.Todos)
                 {
                     if (todo.Todo.Id == dbtodo.ParentId)
                     {
-                        var alma = new TodoTree(dbtodo);
-                        parentTodos.Add(alma);
-                        todo.Children.Add(alma);
+                        var newTodoTreeItem = new TodoTreeItem(dbtodo);
+                        newTreeLevel.Add(newTodoTreeItem);
+                        todo.Children.Add(newTodoTreeItem);
                     }
                 }
             }
 
-            if (parentTodos.Count == 0) {
+            if (newTreeLevel.Count == 0) {
                 return false;
             }
 
-            SetChildren(todoTrees, parentTodos);
+            SetChildren(todoTree, newTreeLevel);
             return true;
         }
 
