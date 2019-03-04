@@ -68,7 +68,7 @@ namespace TodoService.Logics
         private TodoContext db = new TodoContext();
         public IQueryable<Todo> GetAllTodo()
         {
-            return db.Todos;
+            return db.Todos.Where(t => t.Deleted != true);
         }
 
         public Todo GetTodoById(Guid id)
@@ -95,6 +95,7 @@ namespace TodoService.Logics
         {
             todo.Id = Guid.NewGuid();
             todo.ModTime = DateTime.Now;
+            todo.Deleted = false;
             db.Todos.Add(todo);
             db.SaveChanges();
         }
@@ -123,7 +124,8 @@ namespace TodoService.Logics
                 return false;
             }
 
-            db.Todos.Remove(todo);
+            todo.Deleted = true;
+            //db.Todos.Remove(todo);
             db.SaveChanges();
             return true;
         }

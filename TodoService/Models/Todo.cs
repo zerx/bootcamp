@@ -21,5 +21,6 @@ namespace TodoService.Models
         public Guid CategoryId { get; set; }
         public Guid ParentId { get; set; }
         public DateTime ModTime { get; set; }
+        public Boolean Deleted { get; set; }
     }
 }
