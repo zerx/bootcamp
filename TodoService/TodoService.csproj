@@ -97,8 +97,8 @@
   <ItemGroup>
     <Compile Include="Interfaces\ITodo.cs" />
     <Compile Include="Logics\TodoLogic.cs" />
-    <Compile Include="Models\CategoryEnum.cs" />
     <Compile Include="Models\Todo.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\TodoContext.cs" />
     <Compile Include="Models\TodoTreeItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

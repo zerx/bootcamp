@@ -12,7 +12,6 @@ namespace TodoService.Logics
 {
     public class TodoLogic : ITodo
     {
-        //int minutesBefore = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MinutesBefore"]);
         private int minutesBefore = 120;
 
         public TodoLogic()
@@ -77,14 +76,14 @@ namespace TodoService.Logics
             return db.Todos.Find(id);
         }
 
-        public IQueryable<IGrouping<int, Todo>> GetTodosOrderByCategory()
+        public List<Category> GetTodosOrderByCategory()
         {
-            return db.Todos.GroupBy(e => e.Category);
+            return db.Categories.Include("Todos").ToList();
         }
 
-        public IEnumerable<Todo> GetTodosByCategory(int categoryId)
+        public IEnumerable<Todo> GetTodosByCategory(Guid categoryId)
         {
-            return db.Todos.Where(c => categoryId == c.Category);
+            return db.Todos.Where(c => categoryId == c.CategoryId);
         }
 
         public IEnumerable<Todo> GetFreshTodos()

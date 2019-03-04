@@ -60,5 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="TodoTable.sql" />
+    <Build Include="Category.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="TodoInsert.sql" />
   </ItemGroup>
 </Project>

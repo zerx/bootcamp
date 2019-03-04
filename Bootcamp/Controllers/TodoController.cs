@@ -40,7 +40,7 @@ namespace Bootcamp.Controllers
 
         [HttpGet]
         [Route("api/todo/category/{categoryId}")]
-        public IHttpActionResult GetTodosByCategory(int categoryId)
+        public IHttpActionResult GetTodosByCategory(Guid categoryId)
         {
             return Ok(todoLogic.GetTodosByCategory(categoryId));
         }

@@ -8,6 +8,6 @@
 	[Deadline] DATETIME2 NULL, 
 	[Status] NVARCHAR(30) NULL,
 	[ModTime] DATETIME2 NULL,
-	[Category] INT NULL, 
+	[CategoryId] UNIQUEIDENTIFIER NULL, 
 	[ParentId] UNIQUEIDENTIFIER NULL
 )
