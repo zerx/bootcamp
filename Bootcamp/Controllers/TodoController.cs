@@ -24,10 +24,10 @@ namespace Bootcamp.Controllers
         }
 
         [HttpGet]
-        [Route("api/todo/responsible")]
-        public IHttpActionResult GetResponsible()
+        [Route("api/todo/responsible/{Responsible}")]
+        public IHttpActionResult GetResponsible(string Responsible)
         {
-            return Ok(todoLogic.GetResponsible());
+            return Ok(todoLogic.GetResponsible(Responsible));
         }
 
         [HttpGet]

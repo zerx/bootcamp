@@ -13,7 +13,7 @@ namespace TodoService.Models
         public string Description { get; set; }
         [Required]
         public int Priority { get; set; }
-        [StringLength(50)]
+        [StringLength(30)]
         public string Responsible { get; set; }
         public DateTime Deadline { get; set; }
         [StringLength(30)]

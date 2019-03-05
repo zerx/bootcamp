@@ -92,9 +92,9 @@ namespace TodoService.Logics
             return db.Todos.Where(e => e.Status == "Open" || DbFunctions.DiffMinutes(e.ModTime, DateTime.Now) <= minutesBefore);
         }
 
-        public IEnumerable<TodoResponsible> GetResponsible()
+        public IEnumerable<TodoResponsible> GetResponsible(string Responsible)
         {
-            return db.Database.SqlQuery<TodoResponsible>("TodoResponsible").ToList();
+            return db.Database.SqlQuery<TodoResponsible>("TodoResponsible @p0", Responsible);
         }
 
         public void PostTodo(Todo todo)
