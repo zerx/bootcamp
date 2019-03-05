@@ -60,9 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="TodoTable.sql" />
-    <Build Include="Category.sql" />
+    <Build Include="CategoryTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TodoInsert.sql" />
+    <None Include="CategoryInsert.sql" />
   </ItemGroup>
 </Project>
