@@ -63,7 +63,11 @@
     <Build Include="CategoryTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="TodoInsert.sql" />
+    <PostDeploy Include="DataInsert.sql" />
     <None Include="CategoryInsert.sql" />
+    <None Include="TodoInsert.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.publish.xml" />
   </ItemGroup>
 </Project>
