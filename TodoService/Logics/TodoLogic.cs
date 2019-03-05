@@ -68,7 +68,7 @@ namespace TodoService.Logics
         private TodoContext db = new TodoContext();
         public IQueryable<Todo> GetAllTodo()
         {
-            return db.Todos.Where(t => t.Deleted != true);
+            return db.Todos;
         }
 
         public Todo GetTodoById(Guid id)

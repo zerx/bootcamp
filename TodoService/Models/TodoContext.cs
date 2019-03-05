@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using EntityFramework.DynamicFilters;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace TodoService.Models
@@ -16,6 +17,7 @@ namespace TodoService.Models
         {
             Database.SetInitializer<TodoContext>(null);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Filter("Deleted", (Todo t) => t.Deleted, false);
         }
     }
 }
