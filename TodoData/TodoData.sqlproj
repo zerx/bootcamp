@@ -64,6 +64,5 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TodoInsert.sql" />
-    <None Include="Script.PostDeployment1.sql" />
   </ItemGroup>
 </Project>
