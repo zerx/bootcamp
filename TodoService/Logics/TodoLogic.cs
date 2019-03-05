@@ -7,6 +7,7 @@ using TodoService.Interfaces;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Configuration;
+using TodoService.Models.Procedures;
 
 namespace TodoService.Logics
 {
@@ -89,6 +90,11 @@ namespace TodoService.Logics
         public IEnumerable<Todo> GetFreshTodos()
         {
             return db.Todos.Where(e => e.Status == "Open" || DbFunctions.DiffMinutes(e.ModTime, DateTime.Now) <= minutesBefore);
+        }
+
+        public IEnumerable<TodoResponsible> GetResponsible()
+        {
+            return db.Database.SqlQuery<TodoResponsible>("TodoResponsible").ToList();
         }
 
         public void PostTodo(Todo todo)
