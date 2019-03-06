@@ -89,7 +89,8 @@ namespace TodoService.Logics
 
         public IEnumerable<Todo> GetFreshTodos()
         {
-            return db.Todos.Where(e => e.Status == "Open" || DbFunctions.DiffMinutes(e.ModTime, DateTime.Now) <= minutesBefore);
+            DateTime actualTime = DateTime.Now.AddMinutes(minutesBefore * -1);
+            return db.Todos.Where(e => e.Status == "Open" || actualTime <= e.ModTime);
         }
 
         public IEnumerable<TodoResponsible> GetResponsible(string Responsible)
